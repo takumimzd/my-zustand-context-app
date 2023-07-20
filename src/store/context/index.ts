@@ -1,40 +1,60 @@
 import { createContext, useContext } from 'react';
 
 type State = {
-  bears: number;
-  pandas: number;
+  bear: {
+    name: string;
+    age: number;
+  };
+  panda: {
+    name: string;
+    age: number;
+  };
 };
 
 type Action =
   | {
-      type: 'increaseBear';
-      payload: { by: number };
+      type: 'changeNameBear';
+      payload: { name: string };
     }
   | {
-      type: 'increasePanda';
-      payload: { by: number };
+      type: 'changeNamePanda';
+      payload: { name: string };
     };
 
 export const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'increaseBear':
+    case 'changeNameBear':
       return {
         ...state,
-        bears: state.bears + action.payload.by,
+        bears: {
+          ...state.bear,
+          name: action.payload.name,
+        },
       };
-    case 'increasePanda':
+    case 'changeNamePanda':
       return {
         ...state,
-        pandas: state.pandas + action.payload.by,
+        pandas: {
+          ...state.bear,
+          name: action.payload.name,
+        },
       };
     default:
       return state;
   }
 };
 
-export const ReactContext = createContext<State>({
-  bears: 0,
-  pandas: 0,
-});
+export const initialState: State = {
+  bear: {
+    name: '太郎',
+    age: 1,
+  },
+  panda: {
+    name: '二郎',
+    age: 2,
+  },
+};
+
+export const ReactContext = createContext<State>(initialState);
 
 export const useReactContext = (): State => useContext(ReactContext);
